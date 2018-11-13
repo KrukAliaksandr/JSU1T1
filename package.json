@@ -1,0 +1,11 @@
+{
+  "name": "task1",
+  "version": "1.0.0",
+  "description": "function,that reads file and prints the string, that consists of even-numbered file strings, on the console",
+  "main": "task1.js",
+  "scripts": {
+    "test": "-test"
+  },
+  "author": "Aliaksandr_Kruk",
+  "license": "ISC"
+}
