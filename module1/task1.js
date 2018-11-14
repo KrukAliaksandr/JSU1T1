@@ -2,16 +2,17 @@
 /* eslint-disable indent */
 
 
-function Main(path,encoding) {
+function displayFileEvenLines(path, encoding) {
+    checkParametres(path, encoding);
     let fs = require("fs");
-    fs.readFile(path,encoding, function (err, contents) {
+    fs.readFile(path, encoding, function (err, contents) {
         if (err) {
             console.log(err.message);
         }
         console.log(contents);
         let fileStrings = contents.split("\r\n");
         if (fileStrings.length < 2) {
-            console.log("Strings count is less than 2!");
+            throw new Error("File must have at least 2 lines");
         }
         else {
             for (let i = 0; i < fileStrings.length(); i + 2) {
@@ -22,4 +23,10 @@ function Main(path,encoding) {
     console.log("after calling readFile");
 }
 
-Main();
+function checkParametres(pathToFile, encoding) {
+    if (typeof pathToFile !== "string" || typeof encoding !== "string") {
+        throw new Error("Wrong type of variable. Path to file or encoding must be String");
+    }
+}
+
+displayFileEvenLines("textdummy.txt", "utf8");
