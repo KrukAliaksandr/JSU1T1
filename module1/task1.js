@@ -28,11 +28,25 @@ function printEvenLines(fileStrings) {
 }
 
 let result = function readFileEvenLines(path, encoding) {
-    readFile(path, encoding).then((readResult) => {
+    doesFileExist(path).then(readFile(path, encoding).then((readResult) => {
         let fileStrings = readResult.split("\r\n");
         printEvenLines(fileStrings);
-    })
+    }))
         .catch((error) => { console.log(error.message); });
 };
 
+let doesFileExist =  function(filename) {
+    return new Promise((resolve, reject) => {
+        fs.access(filename, fs.constants.F_OK | fs.constants.R_OK, (err) => {
+            if (err) {
+                console.error(
+                    `${filename} ${err.code === "ENOENT" ? "does not exist" : "is read-only"}`);
+                
+                reject(err);
+                }
+            else resolve(filename);
+            
+        });
+    });
+};
 result(path, encoding);
