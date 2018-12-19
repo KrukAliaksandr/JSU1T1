@@ -6,9 +6,9 @@ const fs = require("fs");
 const path = "textdummy.txt";
 const encoding = "utf8";
 
-function readFile(filename, enc) {
+function readFile(path, encoding) {
     return new Promise(function (resolve, reject) {
-        fs.readFile(filename, enc, function (err, res) {
+        fs.readFile(path, encoding, function (err, res) {
             if (err) reject(err);
             else resolve(res);
         });
@@ -28,11 +28,26 @@ function printEvenLines(fileStrings) {
 }
 
 let result = function readFileEvenLines(path, encoding) {
-    readFile(path, encoding).then((readResult) => {
+    doesFileExistAndIsReadable(path).then(readFile(path, encoding).then((readResult) => {
         let fileStrings = readResult.split("\r\n");
         printEvenLines(fileStrings);
-    })
+    }))
         .catch((error) => { console.log(error.message); });
 };
+
+function doesFileExistAndIsReadable(path) {
+    return new Promise((resolve, reject) => {
+        fs.access(path, fs.constants.F_OK | fs.constants.R_OK, (err) => {
+            if (err) {
+                console.error(
+                    `${path} ${err.code === "ENOENT" ? "does not exist" : "is read-only"}`);
+
+                reject(err);
+            }
+            else resolve(path);
+
+        });
+    });
+}
 
 result(path, encoding);
